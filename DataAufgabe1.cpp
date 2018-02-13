@@ -73,44 +73,20 @@ public:
 	    #if VERBOSE == 1
                 std::cout << "inserting: " << t << std::endl;
         #endif
-	    if(m_pHead == 0){
-            m_pHead = new Elem(t, 0);
-	    }else{
-            Elem** pTmp = look4(t);
-            if(*pTmp == m_pHead){
-                m_pHead = new Elem(t, m_pHead);
-            }else{
-                *pTmp = new Elem(t, *pTmp);
-            }
-        }
+
+        Elem** pTmp = look4(t);
+        *pTmp = new Elem(t, *pTmp);
 	}
 	void erase(T t) {
 	     #if VERBOSE == 1
-	    std::cout << "Deleting: " << t << std::endl;
+            std::cout << "Deleting: " << t << std::endl;
 	    #endif // VERBOSE
-	    Elem* toDelete = 0;
-	    if(m_pHead->m_Content == t){
-             toDelete = m_pHead;
-             m_pHead = m_pHead->m_pNext;
-             delete toDelete;
-             // hier sollte der Pointer unbedingt zum nullpointer gesetzt werden
-             toDelete = 0;
-              #if VERBOSE == 1
-             std::cout << "head changed" << std::endl;
-             #endif
-	    }else{
-            Elem* prev = findElem(t);
-           // std::cout << "tmp" << (*tmp)->m_Content << " "<< (*tmp)->m_Content << std::endl;
-            if(prev != 0){
-                #if VERBOSE == 1
-                 std::cout << "prev != 0" << std::endl;
-                #endif
-                 toDelete = prev->m_pNext;
-                 prev->m_pNext = prev->m_pNext->m_pNext;
-                 delete toDelete;
-                 toDelete = 0;
-            }
-	    }
+
+	     Elem** pTmp = look4(t);
+	     Elem* pNext = (*pTmp)->m_ pNext;
+
+	     delete(*pTmp);
+	    *pTmp = pNext;
 	}
 	bool find(T t) const {
 		for(Elem* pTmp = m_pHead; pTmp && pTmp->m_Content <= t; pTmp =

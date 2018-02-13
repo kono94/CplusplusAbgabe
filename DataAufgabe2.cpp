@@ -7,7 +7,7 @@ template<class T>
 class Data {
 	struct Node {
 		Node(T t, unsigned iCount = 1, Node* pLeft = 0, Node* pRight = 0) : m_Content(t), m_iCount(iCount), m_pLeft(pLeft), m_pRight(pRight) {}
-		T m_Content;
+		T m_Content
 		unsigned m_iCount;
 		Node* m_pLeft;
 		Node* m_pRight;

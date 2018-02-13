@@ -1,8 +1,8 @@
 #include <iostream>
 #include <fstream>
 
-#define AUFG 2
-#define VERBOSE 0
+#define AUFG 1
+#define VERBOSE 1
 
 
 #if AUFG == 1
