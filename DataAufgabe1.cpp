@@ -5,39 +5,57 @@
 template<class T>
 class Data {
 	struct Elem {
+	    // Konstante Members MÜSSEN in der Initialisierungsliste gefüllt werden
+	    // nicht-konstante members können, so wie hier, auch in der Initialiserungsliste gefüllt werden
 		Elem(T t,Elem* pNext = 0) : m_Content(t),m_pNext(pNext) {}
 		T m_Content;
 		Elem* m_pNext;
 	};
 public:
-	Data() : m_pHead(0) {std::cout << "Constructor called" << std::endl;}
+    // sollte überall Data<T> stehen oder ist "Data" auch ausreichend?
+	Data() : m_pHead(0) {
+	     #if VERBOSE == 1
+            std::cout << "Constructor called" << std::endl;
+	     #endif
+    }
 
+	// Expliziter copy constructor
+    // wichtig: const- Parameterübergabe
+    Data(const Data &d) : m_pHead(0){
+         #if VERBOSE == 1
+            std::cout << "normal copy constructor" << std::endl;
+	      #endif
+	      for(Elem* tmp = d.m_pHead; tmp; tmp = tmp->m_pNext)
+              insert(tmp->m_Content);
+	}
 
 //   Data(const Data& n) : m_pHead(n.m_pHead){}
-  ~Data(){
+    ~Data(){
+            #if VERBOSE == 1
            std::cout<< "destructor called" << std::endl;
+           #endif
             for(Elem* pTmp = m_pHead; pTmp; pTmp = m_pHead ) {
                 m_pHead = m_pHead->m_pNext;
-                std::cout << "deleting: " << pTmp->m_Content << " adr.:" << &(pTmp) << std::endl;
+                #if VERBOSE == 1
+                    std::cout << "deleting: " << pTmp->m_Content << " adr.:" << &(pTmp) << std::endl;
+                #endif
                 delete pTmp;
                 // muss nicht im destruktor gesetzt werden?!
                 pTmp = 0;
             }
-	}
-
-	Data(const Data &d) : m_pHead(0){
-	      std::cout << "normal copy constructor" << std::endl;
-	      for(Elem* tmp = d.m_pHead; tmp; tmp = tmp->m_pNext)
-            insert(tmp->m_Content);
-	}
+    }
 
 
-    Data& operator=( const Data& d ){
-        //löscht alle vorhandenen Einträge, GAANZ wichrig;
+
+    // crArg steht für "constant refrence argument"
+    Data& operator=( const Data<T>& crArg ){
+        //löscht alle vorhandenen Einträge, GAANZ wichtig;
         // explizit destruktor aufrufen
         this->~Data();
-	    std::cout << "Copy constructor called by = operator " << std::endl;
-	    for(Elem* tmp = d.m_pHead; tmp; tmp = tmp->m_pNext)
+        #if VERBOSE == 1
+                std::cout << "Copy constructor called by = operator " << std::endl;
+        #endif
+	    for(Elem* tmp = crArg.m_pHead; tmp; tmp = tmp->m_pNext)
             insert(tmp->m_Content);
 
         // ultra wichtig, fragen warum
@@ -45,13 +63,16 @@ public:
 	}
 
 
-	Data::unsigned size() const {
+	unsigned size() const {
 		unsigned uiRes = 0;
 		for(Elem* pTmp = m_pHead; pTmp; pTmp = pTmp->m_pNext,++uiRes);
 		return uiRes;
 	}
 
 	void insert(T t) {
+	    #if VERBOSE == 1
+                std::cout << "inserting: " << t << std::endl;
+        #endif
 	    if(m_pHead == 0){
             m_pHead = new Elem(t, 0);
 	    }else{
@@ -64,20 +85,26 @@ public:
         }
 	}
 	void erase(T t) {
+	     #if VERBOSE == 1
 	    std::cout << "Deleting: " << t << std::endl;
+	    #endif // VERBOSE
 	    Elem* toDelete = 0;
 	    if(m_pHead->m_Content == t){
              toDelete = m_pHead;
              m_pHead = m_pHead->m_pNext;
              delete toDelete;
-             // hier sollte der Pointer zum nullpointer gesetzt werden
+             // hier sollte der Pointer unbedingt zum nullpointer gesetzt werden
              toDelete = 0;
+              #if VERBOSE == 1
              std::cout << "head changed" << std::endl;
+             #endif
 	    }else{
             Elem* prev = findElem(t);
            // std::cout << "tmp" << (*tmp)->m_Content << " "<< (*tmp)->m_Content << std::endl;
             if(prev != 0){
+                #if VERBOSE == 1
                  std::cout << "prev != 0" << std::endl;
+                #endif
                  toDelete = prev->m_pNext;
                  prev->m_pNext = prev->m_pNext->m_pNext;
                  delete toDelete;
@@ -92,6 +119,7 @@ public:
 				return true;
 		return false;
 	}
+
 	Elem* findElem(T t) const{
         for(Elem* pTmp = m_pHead; pTmp && pTmp->m_Content <= t; pTmp =
 		            pTmp->m_pNext)
@@ -99,6 +127,7 @@ public:
                 return pTmp;
         return 0;
 	}
+
 	void print(unsigned max) const{
 		Elem* tmp;
 		std::cout << "[";
@@ -115,19 +144,19 @@ private:
 			pTmp = &((*pTmp)->m_pNext);
 		return pTmp;
 	}
-private:
+
 	Elem* m_pHead;
 };
+
 Data<int> readElems(const char* crFile) {
  	Data<int> res;
 	std::ifstream s(crFile);
 	while (s) {
 		int i;
 		s >> i;
-		if (s) {
+		if (s)
 			res.insert(i);
-			std::cout << "inserted: " << i << std::endl;
-		}
+
 	}
 	return res;
 }
@@ -140,7 +169,7 @@ Data<int> deleteElems(const char* crFile,Data<int>& crRes) {
 		s >> i;
 		if (s)
 			if (res.find(i))
-				res.erase(i);
+                res.erase(i);
 	}
 	return res;
 }
