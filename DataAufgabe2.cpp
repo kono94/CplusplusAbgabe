@@ -107,12 +107,12 @@ public:
 	}
 
 	void print(unsigned max) {
-	    std::cout << "[";
+	    cout << "[";
 	    if(m_pRoot){
             if(printHelper(m_pRoot, max) >= max)
-            std::cout << "...";
+            cout << "...";
 	    }
-        std::cout << "]" << std::endl;
+        cout << "]" << endl;
 	}
 
 private:
@@ -158,7 +158,7 @@ private:
 
             if(max > c){
                 for(unsigned i = 0; i< n->m_iCount && max > c; ++i){
-                    std::cout << n->m_Content << " ";
+                    cout << n->m_Content << " ";
                     ++c;
                 }
                 if(n->m_pRight && max > c)
