@@ -21,7 +21,7 @@ using namespace std;
 #include "FileHelper.cpp"
 
 int main() {
-	Data<int> l1,l2,l3;
+	Data<int> l1,l2;
 	#if VERBOSE == 1
         cout << "READING " << maData << endl;
 	#endif

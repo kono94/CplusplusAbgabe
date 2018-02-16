@@ -128,7 +128,7 @@ private:
         }
     }
 
-    void destroyTree(Node*& n){
+    void destroyTree(Node* n){
 	  if(n){
             m_iSize = m_iSize - n->m_iCount;
             destroyTree(n->m_pLeft);
@@ -153,17 +153,16 @@ private:
 
     unsigned int printHelper(Node* n, unsigned int max){
         unsigned c = 0;
-            if(n->m_pLeft)
-                c = printHelper(n->m_pLeft, max);
+        if(n->m_pLeft)
+            c = printHelper(n->m_pLeft, max);
 
-            if(max > c){
-                for(unsigned i = 0; i< n->m_iCount && max > c; ++i){
-                    cout << n->m_Content << " ";
-                    ++c;
-                }
-                if(n->m_pRight && max > c)
-                    c = printHelper(n->m_pRight, max);
-            }
+        for(unsigned i = 0; i< n->m_iCount && max > c; ++i){
+            cout << n->m_Content << " ";
+            ++c;
+        }
+        if(n->m_pRight && max > c)
+            c += printHelper(n->m_pRight, max);
+
         return c;
     }
 
