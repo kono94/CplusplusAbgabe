@@ -137,7 +137,7 @@ private:
         return pTmp;
     }
 
-    unsigned int printHelper(Node* n, unsigned int max) {
+    unsigned int printHelper(Node* n, unsigned max) {
         unsigned c = 0;
         if (n->m_pLeft)
             c = printHelper(n->m_pLeft, max);
