@@ -141,15 +141,12 @@ private:
         unsigned c = 0;
         if (n->m_pLeft)
             c = printHelper(n->m_pLeft, max);
-
-        if (max > c) {
-            for (unsigned i = 0; i < n->m_iCount && max > c; ++i) {
-                cout << n->m_Content << " ";
-                ++c;
-            }
-            if (n->m_pRight && max > c)
-                c = printHelper(n->m_pRight, max);
+        for (unsigned i = 0; i < n->m_iCount && max > c; ++i) {
+            cout << n->m_Content << " ";
+            ++c;
         }
+        if (n->m_pRight && max > c)
+                c += printHelper(n->m_pRight, max);
         return c;
     }
 
