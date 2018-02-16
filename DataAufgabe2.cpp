@@ -24,12 +24,10 @@ public:
 	}
 
     Data& operator=( const Data& d ){
-        //löscht alle vorhandenen Einträge, GAANZ wichrig;
-        // explizit destruktor aufrufen
+        //loescht alle vorhandenen Eintraee, wichrig;
         destroyTree(m_pRoot);
 	    cout << "Copy constructor called by = operator " << endl;
         m_pRoot = copyTree(d.m_pRoot);
-        // ultra wichtig, fragen warum
         return *this;
 	}
 
@@ -39,32 +37,53 @@ public:
 	}
 
 	void insert(T t) {
+       /*
+        Die look4-Methode liefert den Doppelpointer
+        zurueck, der auf den neuen Knoten zeigen wird.
+        Gibt es schon einen Knoten, der den gleichen Content
+        hat, so wird lediglich der knoteninterne Counter
+        hochgezaehlt, der repraesentiert, wie viele gleiche
+        Contents es insgesamt gibt.
+       */
 	   Node** pTmp = look4(t);
 	   if((*pTmp) == 0)
             (*pTmp) = new Node(t);
        else
             (*pTmp)->m_iCount += 1;
 
+        // Anzahl der gesamten Elemente
 	   ++m_iSize;
 	}
 
 	void erase(T t) {
         Node** tmp = look4(t);
+        // Gibt es keinen Knoten mit t Content, passiert nichts
         if(!(*tmp)){
             return;
         }
 
+        /*
+            Gibt es einen Konten mit passendem Content,
+            so wird nur der Counter reduziert. Wuerde er
+            auf 0 sinken, so muss der Knoten wirklich geloescht werden.
+        */
         if((*tmp)->m_iCount > 1){
             (*tmp)->m_iCount -= 1;
             return;
         }
 
-        //keine Söhne
+        /*
+          Keine Söhne;
+          Einfach loeschen
+        */
         if((*tmp)->m_pLeft == 0 && (*tmp)->m_pRight == 0){
             delete (*tmp);
             (*tmp) = 0;
         }
-        // Nur einen rechten Sohn
+        /*
+          Nur einen rechten Sohn;
+          Zu loeschender Knoten wird uebersprungen
+         */
         else if((*tmp)->m_pLeft){
             Node* skipper = (*tmp)->m_pRight;
             delete (*tmp);
@@ -78,25 +97,32 @@ public:
         }
         // zwei Söhne
         else{
-            // speicher verweis auf zu löschenden knoten
+            // speicher verweis auf zu loeschenden Knoten
              Node* pDel = (*tmp);
              Node* pFa = (*tmp);
              Node* pSon = (*tmp)->m_pLeft;
 
-            // finde den größten kleinsten Knoten zum ersetzen
+            // finde den groeßten kleinsten Knoten zum Ersetzen
              while(!(pSon->m_pRight)){
                 pFa = pSon;
                 pSon = pSon->m_pRight;
              }
 
+            /*
+                Biege noetige Pointer um, um die Struktur
+                des Binaerbaumes zu erhalten.
+                Besonderheit dieser Methode:
+                Der Content wird zwischen dem zu loeschenden
+                und ersetzenden Knoten nicht deep copied, sondern
+                es werden nur Pointer umgebogen!
+            */
              (*tmp) = pSon;
 
              if(pFa != pDel)
                 pFa->m_pRight = pSon->m_pLeft;
              if(pSon != pDel->m_pLeft)
                 pSon->m_pLeft = pDel->m_pLeft;
-             if(pSon != pDel->m_pRight)
-                pSon->m_pRight = pDel->m_pRight;
+             pSon->m_pRight = pDel->m_pRight;
 
              delete pDel;
         }
@@ -140,6 +166,12 @@ private:
 
 
     Node** look4(T t){
+        /*
+            Findet iterativ einen Knoten mit dem Content
+            "t".
+            Ist  t noch zu klein, gehe links runter
+            Ist t noch zu groß, gehe rechts runter
+        */
         Node** pTmp = &m_pRoot;
 
         while (*pTmp && (*pTmp)->m_Content != t){
@@ -152,6 +184,14 @@ private:
     }
 
     unsigned int printHelper(Node* n, unsigned int max){
+        /*
+            Printet maximal "max"-Anzahl an Content-Elementen
+            aus.
+            Erst ganz nach links runter im Baum,
+            dann ausgeben, dabei jedesmal einen counter erhoehen.
+            Danach geht die Rekursion wieder nach oben und potentiell nach
+            rechts usw..
+        */
         unsigned c = 0;
         if(n->m_pLeft)
             c = printHelper(n->m_pLeft, max);

@@ -83,8 +83,7 @@ public:
                 pFa->m_pRight = pSon->m_pLeft;
             if (pSon != pDel->m_pLeft)
                 pSon->m_pLeft = pDel->m_pLeft;
-            if (pSon != pDel->m_pRight)
-                pSon->m_pRight = pDel->m_pRight;
+            pSon->m_pRight = pDel->m_pRight;
 
             delete pDel;
         }
