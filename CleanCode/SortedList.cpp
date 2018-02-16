@@ -1,14 +1,11 @@
 template<class T>
 class Data {
 	struct Elem {
-	    // Konstante Members   in der Initialisierungsliste gefüllt werden
-	    // nicht-konstante members können, so wie hier, auch in der Initialiserungsliste gefüllt werden
-		Elem(T t,Elem* pNext = 0) : m_Content(t),m_pNext(pNext) {}
+	    Elem(T t,Elem* pNext = 0) : m_Content(t),m_pNext(pNext) {}
 		T m_Content;
 		Elem* m_pNext;
 	};
 public:
-    // sollte überall Data<T> stehen oder ist "Data" auch ausreichend?
 	Data() : m_pHead(0) {}
 
     Data(const Data &d) : m_pHead(0){

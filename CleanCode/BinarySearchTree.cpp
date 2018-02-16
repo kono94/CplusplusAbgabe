@@ -65,12 +65,10 @@ public:
         }
         // zwei Söhne
         else{
-            // speicher verweis auf zu löschenden knoten
              Node* pDel = (*tmp);
              Node* pFa = (*tmp);
              Node* pSon = (*tmp)->m_pLeft;
 
-            // finde den größten kleinsten Knoten zum ersetzen
              while(!(pSon->m_pRight)){
                 pFa = pSon;
                 pSon = pSon->m_pRight;
@@ -124,7 +122,6 @@ private:
             n = 0;
         }
 	}
-
 
     Node** look4(T t){
         Node** pTmp = &m_pRoot;
