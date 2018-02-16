@@ -26,15 +26,15 @@ public:
 
     void copyList(Elem* oHead) {
         Elem** myTmp = &m_pHead;
-        for (Elem* tmp = oHead; tmp; tmp = tmp - > m_pNext) {
-            *myTmp = new Elem(tmp - > m_Content, tmp - > m_pNext);
-            myTmp = &((*myTmp) - > m_pNext);
+        for (Elem* tmp = oHead; tmp; tmp = tmp->m_pNext) {
+            *myTmp = new Elem(tmp->m_Content, tmp->m_pNext);
+            myTmp = &((*myTmp)->m_pNext);
         }
     }
 
     unsigned size() const {
         unsigned uiRes = 0;
-        for (Elem* pTmp = m_pHead; pTmp; pTmp = pTmp - > m_pNext, ++uiRes);
+        for (Elem* pTmp = m_pHead; pTmp; pTmp = pTmp->m_pNext, ++uiRes);
         return uiRes;
     }
 
@@ -45,25 +45,25 @@ public:
 
     void erase(T t) {
         Elem** pTmp = look4(t);
-        if (!(*pTmp) || (*pTmp) - > m_Content != t) {
+        if (!(*pTmp) || (*pTmp)->m_Content != t) {
             return;
         }
-        Elem* pNext = (*pTmp) - > m_pNext;
+        Elem* pNext = (*pTmp)->m_pNext;
         delete (*pTmp);
         *pTmp = pNext;
     }
 
     bool find(T t) const {
-        for (Elem* pTmp = m_pHead; pTmp && pTmp - > m_Content <= t; pTmp = pTmp - > m_pNext)
-            if (pTmp - > m_Content == t) return true;
+        for (Elem* pTmp = m_pHead; pTmp && pTmp->m_Content <= t; pTmp = pTmp->m_pNext)
+            if (pTmp->m_Content == t) return true;
         return false;
     }
 
     void print(unsigned max) const {
         Elem* tmp;
         cout << "[";
-        for (tmp = m_pHead; tmp && max > 0; tmp = tmp - > m_pNext, --max)
-            cout << tmp - > m_Content << "\t";
+        for (tmp = m_pHead; tmp && max > 0; tmp = tmp->m_pNext, --max)
+            cout << tmp->m_Content << "\t";
         if (tmp) cout << "...";
         cout << "]" << endl;
     }
@@ -71,13 +71,13 @@ public:
 private:
     Elem** look4(T t) {
         Elem** pTmp = &m_pHead;
-        while (*pTmp && (*pTmp) - > m_Content < t) pTmp = &((*pTmp) - > m_pNext);
+        while (*pTmp && (*pTmp)->m_Content < t) pTmp = &((*pTmp)->m_pNext);
         return pTmp;
     }
 
     void deleteList() {
         for (Elem* pTmp = m_pHead; pTmp; pTmp = m_pHead) {
-            m_pHead = m_pHead - > m_pNext;
+            m_pHead = m_pHead->m_pNext;
             delete pTmp;
             pTmp = 0;
         }
