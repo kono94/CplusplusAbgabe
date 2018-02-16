@@ -116,7 +116,7 @@ private:
         }
     }
 
-    void destroyTree(Node*&n) {
+    void destroyTree(Node* n) {
         if (n) {
             m_iSize = m_iSize - n->m_iCount;
             destroyTree(n->m_pLeft);
